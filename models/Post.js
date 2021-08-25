@@ -2,60 +2,24 @@ const mongoose = require('mongoose');
 
 const PostSchema = new mongoose.Schema(
     {
-        username:{
+        userId: {
             type: String,
             required: true,
-            min:3,
-            max: 20,
-            unique: true,
-        },
-        email: {
-            type: String,
-            required: true,
-            max: 50,
-            unique: true
-        },
-        password: {
-            type: String,
-            required: true,
-            min: 12,
-        },
-        profilePicture:{
-            type: String,
-            default: ""
-        },
-        coverPicture:{
-            type: String,
-            default: ""
-        },
-        followers:{
-            type: Array,
-            default: [], 
-        },
-        followings:{
-            type: Array,
-            default: [],
-        },
-        isAdmin:{
-            type: Boolean,
-            default: false
+
         },
         description: {
             type: String,
-            max: 50
+            // required: true,
+            max: 140,
         },
-        city: {
+        img: {
             type: String,
-            max: 50
+
         },
-        from: {
-            type: String,
-            max: 50
-        },
-        relationship: {
-            type: Number,
-            enum: [1,2,3],
-        },
+        likes: {
+            type: Array,
+            default: [],
+        }
     },
     {
         timestamps: true
