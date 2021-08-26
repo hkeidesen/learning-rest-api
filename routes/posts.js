@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Post = require('../models/Post'); //bigM or smallM? 
+const User = require('../Models/User');
 
 //create a post
 router.post('/', async (req, res) => {
@@ -68,6 +69,31 @@ router.put('/:id/like', async (req, res) => {
     }
 });
 //get a post
+router.get('/:id', async (req, res) => {
+    try {
+        //try to find the post by looking for the req.params.id (found in url)
+        const post = await Post.findById(req.params.id)
+        //send the post
+        res.status(200).json(post)
+    }catch(err){
+        res.status(500).json(err)
+    }
+})
 //get timeline posts
-
+router.get('/timeline/all', async (req, res) => {
+    // let postArray = [];
+    try {    
+        const currentUser = await User.findById(req.body.userId)
+        const userPosts = await Post.find({userId:currentUser._id})
+        //using promise here since we will loop through all the user posts, since await will not fetch all posts
+        const friendPosts = await Promise.all(
+            currentUser.followings.map(friendId=>{
+                return Post.find({userId:friendId})
+            })
+        );
+        res.json(userPosts.concat(...friendPosts))
+    }catch(err){
+        console.log(err)
+    }
+})
 module.exports = router;
